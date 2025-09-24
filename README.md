@@ -1,6 +1,14 @@
 # Prisma player
 
-Le package `@prismamedia/player` est à disposition des sites Prisma Media externe souhaitant implémenter un player vidéo Dailymotion avec la monétisation géré par CoreAds.
+Le package `@prismamedia/player` est à disposition des sites Prisma Media externe souhaitant implémenter un player vidéo [Dailymotion](https://developers.dailymotion.com/sdk/player-sdk/web/) avec la monétisation géré par CoreAds.
+
+Les actions ci-dessous sont réalisés par le package :
+
+- Chargement du SDK Dailymotion
+- Création du player et appel publicitaire en parallèle
+
+> [!NOTE]
+> Le player écoute l'événement `AD_READYTOFETCH` déclenché par Dailymotion quand une publicité peut être affichée. A chaque appel, la chaine de monétisation est récupérée auprès de CoreAds et injecté dans le player
 
 ## Pré-requis
 
@@ -28,6 +36,26 @@ Pour des raisons de monétisation celui-ci doit s'exécuter le plus tôt possibl
 
 Les players `Widget` et `Autre` sont des players secondaires, ils peuvent être lazyloadés et initialisés plutard en fonction de vos besoins. Généralement la lecture automatique est désactivée.
 
+## Installation
+
+> [!WARNING]
+> Le package est livré en TypeScript uniquement. Adaptez votre configuration pour importer des fichiers `.ts` ([voir TypeScript avec webpack](https://webpack.js.org/guides/typescript)).
+
+### NPM
+
+Le package `@prismamedia/player` est hébergé sur le registre NPM. Installez le package sur votre projet avec la commande suivante :
+
+```bash
+npm install @prismamedia/player --save-dev
+```
+
+```bash
+yarn add @prismamedia/player --dev
+```
+
+> [!WARNING]
+> Version minimale de Node.js `20.18.0`
+
 ## Mise en place
 
 ### HTML
@@ -50,6 +78,9 @@ Le player vidéo nécessite un élément HTML `<div>` avec les attributs HTML ci
   <div id="<unique_id>"></div>
 </div>
 ```
+
+> [!IMPORTANT]
+> Les deux éléments HTML doivent avoir un attribut `id` **unique**
 
 | Propriété          |               Type                | Description                       |
 | ------------------ | :-------------------------------: | --------------------------------- |
