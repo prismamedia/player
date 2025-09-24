@@ -34,7 +34,7 @@ Pour des raisons de monétisation celui-ci doit s'exécuter le plus tôt possibl
 
 #### `Widget` et `Autres`
 
-Les players `Widget` et `Autre` sont des players secondaires, ils peuvent être lazyloadés et initialisés plutard en fonction de vos besoins. Généralement la lecture automatique est désactivée.
+Les players `Widget` et `Autre` sont des players secondaires, ils peuvent être lazyloadés et initialisés plus tard en fonction de vos besoins. Généralement la lecture automatique est désactivée.
 
 ## Installation
 
