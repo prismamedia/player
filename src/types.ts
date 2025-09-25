@@ -8,12 +8,11 @@ export type DailymotionPlayerInstance = {
 	on: (event: string, callback: any, parameters?: string[]) => void
 	off: (event: string, callback?: any) => void
 	play: () => void
-	setCustomConfig: (customConfig: {
-		adurl?: string
-	}) => void
+	setCustomConfig: (customConfig: { adurl?: string }) => void
 }
 
 export type Player = {
+	element: HTMLElement
 	adsCore: AdsCore
 	instance: DailymotionPlayerInstance | null
 	reboundCount: number

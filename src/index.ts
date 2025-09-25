@@ -1,18 +1,16 @@
 import type {
 	AdPosition,
-	AdsCore,
 	DailymotionPlayerInstance,
 	DailymotionPlayerInstanceState,
 	Player
 } from './types'
 
 export default class DailymotionPlayer {
-	playerWrapper: HTMLElement
 	player: Player
 
 	constructor(element: HTMLElement) {
-		this.playerWrapper = element
 		this.player = {
+			element,
 			adsCore: JSON.parse(element.getAttribute('data-ads-core') ?? ''),
 			instance: null,
 			reboundCount: 0,
@@ -35,6 +33,13 @@ export default class DailymotionPlayer {
 					adurl: adsCustomConfig
 				})
 			}
+			this.player.element.dispatchEvent(
+				new window.CustomEvent('prismaPlayerReady', {
+					detail: {
+						instance: this.player.instance
+					}
+				})
+			)
 		})
 	}
 
@@ -61,7 +66,7 @@ export default class DailymotionPlayer {
 	 * Create player
 	 */
 	async createPlayer() {
-		const playerElement = this.playerWrapper.firstElementChild as HTMLElement
+		const playerElement = this.player.element.firstElementChild as HTMLElement
 		this.player.instance = await window.dailymotion.createPlayer(
 			playerElement.getAttribute('id') as string,
 			{
@@ -120,7 +125,7 @@ export default class DailymotionPlayer {
 		return new Promise((resolve) => {
 			window.coreAds.queue.push(async () => {
 				const adParams = await window.coreAds.getVideoSlotParameters({
-					htmlPlacerId: this.playerWrapper.getAttribute('id') as string,
+					htmlPlacerId: this.player.element.getAttribute('id') as string,
 					reboundCount: this.player.reboundCount,
 					preroll_position: this.player.prerollPosition,
 					adPosition,

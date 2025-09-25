@@ -108,6 +108,22 @@ const prismaPlayer = new PrismaPlayer(document.getElementById('playerWrapper-1')
 prismaPlayer.init();
 ```
 
+## Evénements
+
+Le package expose les événements natifs ci-dessous sur l'élément `[data-ads-core]`. L'événement peut exposer des données additionnelles dans l'objet `e.detail`.
+
+| Type de l'événement | Description                                                                                            |
+| ------------------- | ------------------------------------------------------------------------------------------------------ |
+| `prismaPlayerReady` | Déclenché lorsque le player Dailymotion est prêt. L'instance du player est transmise dans l'événement. |
+
+Exemple d'un écouteur quand le player est prêt.
+
+```js
+document.querySelector('#playerWrapper-1').addEventListener('prismaPlayerReady', (e) => {
+  // L'instance du player est accessible dans l'objet `e.detail.instance`
+});
+```
+
 ## Exemples
 
 ### Player `Leader`
