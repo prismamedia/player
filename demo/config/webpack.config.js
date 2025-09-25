@@ -163,7 +163,7 @@ const createConfig = ({ isProduction }) => {
 	return config
 }
 
-module.exports = function webpackConfig(env, argv) {
+module.exports = function webpackConfig(_env, argv) {
 	const isProduction = argv.mode === 'production'
 
 	return createConfig({

@@ -4,7 +4,7 @@
 		"allowJs": true,
 		"checkJs": false,
 		"target": "es2020",
-		"lib": ["DOM.Iterable", "es2017", "dom"],
+		"lib": ["DOM.Iterable", "es2022", "dom"],
 		"strict": true,
 		"esModuleInterop": true,
 		"declaration": false,
