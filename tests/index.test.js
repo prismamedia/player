@@ -24,8 +24,8 @@ describe('PrismaPlayer', () => {
 
 	describe('constructor', () => {
 		it('should set default variables as properties', () => {
-			expect(prismaPlayer.playerWrapper).toStrictEqual(document.querySelector('#playerWrapper-1'))
 			expect(prismaPlayer.player).toStrictEqual({
+				element: document.querySelector('#playerWrapper-1'),
 				adsCore: {
 					playerVideoId: 'k4TUcxu2wZBNIyyyl5p',
 					playerPosition: 'Leader',
