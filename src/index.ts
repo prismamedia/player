@@ -20,7 +20,7 @@ export default class DailymotionPlayer {
 	}
 
 	async init() {
-		await this.loadScript()
+		typeof window.dailymotion === 'undefined' && (await this.loadScript())
 
 		Promise.all([
 			this.createPlayer(),
