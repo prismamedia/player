@@ -52,5 +52,4 @@ jobs:
         run: npm run build
 
       - name: NPM publish
-        # run: npm publish
-        run: echo 'npm publish'
+        run: npm publish --dry-run
