@@ -1,3 +1,7 @@
 # CHANGELOG
 
-TODO
+## 1.0.0
+
+### New features
+
+- First release of Prisma player
