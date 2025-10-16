@@ -5,7 +5,7 @@
 	"bugs": "https://github.com/prismamedia/player/issues",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/prismamedia/player.git"
+		"url": "git+https://github.com/prismamedia/player.git"
 	},
 	"type": "module",
 	"exports": {
