@@ -102,7 +102,7 @@ The constructor accepts the following parameters:
 
 | Arguments       |     Type      | Default |  Required  | Description                            |
 | --------------- | :-----------: | ------- | :--------: | :------------------------------------- |
-| `playerElement` | `HTMLElement` | ``null` | `Required` | HTMLElement to target the player       |
+| `playerElement` | `HTMLElement` | `null`  | `Required` | HTMLElement to target the player       |
 | `config`        |   `Object`    | `{}`    | `Optional` | [Player configuration](#configuration) |
 
 Initialize the library and call the `init` method **after** user consent acceptance.
