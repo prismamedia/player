@@ -4,11 +4,17 @@ export type AdsCore = {
 	playerId: string
 }
 
+export type DailymotionPlayerOptionParams = {
+	mute?: boolean
+    [key: string]: any
+}
+
 export type DailymotionPlayerInstance = {
 	on: (event: string, callback: any, parameters?: string[]) => void
 	off: (event: string, callback?: any) => void
 	play: () => void
 	setCustomConfig: (customConfig: { adurl?: string }) => void
+    setVolume: (volume: number) => void
 }
 
 export type Player = {
