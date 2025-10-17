@@ -36,4 +36,4 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
             name: prisma-player-pack
-            path: $PACKAGES_DIR/$PACKAGE_TGZ
+            path: $PACKAGES_DIR
