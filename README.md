@@ -226,3 +226,38 @@ playerLeader.init();
 const playerWidget = new PrismaPlayer(document.getElementById('playerWrapper2'));
 playerWidget.init();
 ```
+
+## Package testing (`npm-pack` workflow)
+
+> [!IMPORTANT]
+> The local NPM package is intended for development only, not for production. Do not use TGZ in production.
+
+An [npm-pack](.github/workflows/npm-pack.yml) workflow is available to test the package before its official publication on NPM.
+
+Follow the steps below to use the workflow:
+
+1. Trigger the workflow from the [GitHub Actions page](https://github.com/prismamedia/player/actions/workflows/npm-pack.yml)
+   - Click on `Run workflow`
+   - Select the branch: `<branch_name>`
+   - Click on `Run workflow`
+
+2. Retrieve the artifact
+   - Click on the running job
+   - Wait for the workflow to complete
+   - Download the artifact (`prisma-player-pack.zip`)
+
+3. Install the local package
+   - Extract the ZIP file
+   - The content contains a TGZ file (local NPM package)
+   - Install the TGZ on your project:
+
+   ```bash
+   npm install <path_to_tgz_file>
+   ```
+
+4. Test and validate
+   - Test the package and its features
+   - If everything works correctly, the MR can be merged
+   - Once merged, you can install the official version from NPM
+
+> :bulb: More information on the [npm-pack](https://docs.npmjs.com/cli/v9/commands/npm-pack).
