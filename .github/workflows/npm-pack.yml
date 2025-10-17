@@ -1,0 +1,40 @@
+name: NPM Pack
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PACKAGES_DIR: npm-pack-packages
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          cache: 'npm'
+          cache-dependency-path: ./package-lock.json
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Test
+        run: npm run test:qa && npm run test:unit
+
+      - name: Build
+        run: npm run build
+
+      - name: Pack
+        run: |
+            mkdir $PACKAGES_DIR
+            PACKAGE_TGZ=$(npm pack)
+            mv "$PACKAGE_TGZ" $PACKAGES_DIR
+            echo "Generated package \"$PACKAGES_DIR/$PACKAGE_TGZ\""
+
+      - uses: actions/upload-artifact@v4
+        with:
+            name: prisma-player-pack
+            path: $PACKAGES_DIR
