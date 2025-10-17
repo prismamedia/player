@@ -32,11 +32,8 @@ jobs:
             mkdir $PACKAGES_DIR
             PACKAGE_TGZ=$(npm pack)
             mv "$PACKAGE_TGZ" $PACKAGES_DIR
-            echo "Generated package \"$PACKAGES_DIR/$PACKAGE_TGZ\""
-            ls -l
-            ls -l $PACKAGES_DIR
 
       - uses: actions/upload-artifact@v4
         with:
             name: prisma-player-pack
-            path: npm-pack-packages
+            path: $PACKAGES_DIR/$PACKAGE_TGZ
