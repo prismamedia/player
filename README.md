@@ -1,49 +1,52 @@
 # Prisma player
 
-Le package `@prismamedia/player` est à disposition des sites Prisma Media externe souhaitant implémenter un player vidéo [Dailymotion](https://developers.dailymotion.com/sdk/player-sdk/web/) avec la monétisation géré par CoreAds.
+The `@prismamedia/player` package is available for external Prisma Media sites to implement a [Dailymotion video player](https://developers.dailymotion.com/sdk/player-sdk/web/) with monetization managed by CoreAds.
 
-Les actions ci-dessous sont réalisés par le package :
+The following actions are performed by the package:
 
-- Chargement du SDK Dailymotion
-- Création du player et appel publicitaire en parallèle
+- Loading the Dailymotion SDK
+- Creating the player and ad call in parallel
 
 > [!NOTE]
-> Le player écoute l'événement `AD_READYTOFETCH` déclenché par Dailymotion quand une publicité peut être affichée. A chaque appel, la chaine de monétisation est récupérée auprès de CoreAds et injecté dans le player
+> The player listens to the `AD_READYTOFETCH` event triggered by Dailymotion when an ad can be displayed. On each call, the monetization chain is retrieved from CoreAds and injected into the player
 
-## Pré-requis
+## Prerequisites
 
 ### CoreAds
 
-Le script CoreAds doit est chargé et disponible sur la page.
+The CoreAds script must be loaded and available on the page.
 
-La ligne ci-dessous initialise la file d'attente de CoreAds. Elle doit être placé en amont de l'appel au script CoreAds.
+The line below initializes the CoreAds queue. It must be placed before the CoreAds script.
 
 ```js
 window.coreAds.queue = window.coreAds.queue || [];
 ```
 
-### Types de player
+### Player types
 
-Voici les types de player disponible en fonction de leur emplacement sur la page.
+Here are the available player types depending on their location on the page.
 
 #### `Leader`
 
-Le player `Leader` est le player principal de la page. Il est généralement situé en haut de la page avec la lecture automatique activé (`autoplay`).
+The `Leader` player is the main player of the page. It is generally located at the top of the page with autoplay enabled.
 
-Pour des raisons de monétisation celui-ci doit s'exécuter le plus tôt possible. Il ne doit donc pas être lazyloadé.
+For monetization reasons, it must execute as early as possible. It should therefore not be lazy-loaded.
 
-#### `Widget` et `Autres`
+> [!NOTE]
+> This type of player has the sound set to`0.01` by default.
 
-Les players `Widget` et `Autre` sont des players secondaires, ils peuvent être lazyloadés et initialisés plus tard en fonction de vos besoins. Généralement la lecture automatique est désactivée.
+#### `Widget` and `Others`
+
+The `Widget` and `Other` players are secondary players, they can be lazy-loaded and initialized later according to your needs. Generally autoplay is disabled.
 
 ## Installation
 
 > [!WARNING]
-> Le package est livré en TypeScript uniquement. Adaptez votre configuration pour importer des fichiers `.ts` ([voir TypeScript avec webpack](https://webpack.js.org/guides/typescript)).
+> The package is delivered in TypeScript only. Adapt your configuration to import `.ts` files ([see TypeScript with webpack](https://webpack.js.org/guides/typescript)).
 
 ### NPM
 
-Le package `@prismamedia/player` est hébergé sur le registre NPM. Installez le package sur votre projet avec la commande suivante :
+The `@prismamedia/player` package is hosted on the NPM public registry. Install the package on your project with the following command:
 
 ```bash
 npm install @prismamedia/player --save-dev
@@ -54,16 +57,16 @@ yarn add @prismamedia/player --dev
 ```
 
 > [!WARNING]
-> Version minimale de Node.js `20.18.0`
+> Minimum Node.js version `20.18.0`
 
-## Mise en place
+## Setup
 
 ### HTML
 
-Le player vidéo nécessite un élément HTML `<div>` avec les attributs HTML ci-dessous :
+The video player requires an HTML `<div>` element with the following HTML attributes:
 
-- `id`: Identifiant unique
-- `data-ads-core`: Objet JSON de configuration du player
+- `id`: Unique identifier
+- `data-ads-core`: JSON configuration object for the player
 
 ```html
 <div
@@ -80,55 +83,74 @@ Le player vidéo nécessite un élément HTML `<div>` avec les attributs HTML ci
 ```
 
 > [!IMPORTANT]
-> Les deux éléments HTML doivent avoir un attribut `id` **unique**
+> Both HTML elements must have a **unique** `id` attribute
 
-| Propriété          |               Type                | Description                       |
-| ------------------ | :-------------------------------: | --------------------------------- |
-| `playerId`         |             `string`              | Identifiant du player Dailymotion |
-| `playerPosition`   | `'Leader' \| 'Widget' \| 'Autre'` | Position du player                |
-| `playerVideoTitle` |             `string`              | Titre de la vidéo                 |
-| `playerVertical`   |             `boolean`             | Si le player doit être vertical   |
+| Property           |               Type                | Description                           |
+| ------------------ | :-------------------------------: | ------------------------------------- |
+| `playerId`         |             `string`              | Dailymotion player identifier         |
+| `playerPosition`   | `'Leader' \| 'Widget' \| 'Autre'` | Player position                       |
+| `playerVideoTitle` |             `string`              | Video title                           |
+| `playerVertical`   |             `boolean`             | Whether the player should be vertical |
 
 ### JavaScript
 
-L'initialisation d'un player Dailymotion avec la monétisation géré par CoreAds implique les actions suivantes :
-
-- Chargement du SDK Dailymotion
-- Une fois le SDK disponible, les étapes ci-dessous sont réalisées en parallèle pour optimiser les performances
-  - Récupération de la chaine de monétisation auprès de CoreAds
-  - Création du player Dailymotion
-- Au succès de l'étape précédente, la chaine de monétisation est injectée dans le player
-- Le player écoute l'événement `AD_READYTOFETCH` déclenché par Dailymotion quand une publicité peut être affichée. A chaque appel, la chaine de monétisation est récupérée auprès de CoreAds et injecté dans le player
-- Lors de la récupération de la chaine de monétisation, plusieurs informations sur l'emplacement publicitaire sont transmis à CoreAds
-
 ```js
 import PrismaPlayer from '@prismamedia/player';
+```
 
+The constructor accepts the following parameters:
+
+| Arguments       |     Type      | Default |                     Required                      | Description                      |
+| --------------- | :-----------: | ------- | :-----------------------------------------------: | :------------------------------- |
+| `playerElement` | `HTMLElement` | ``null` |                    `Required`                     | HTMLElement to target the player |
+| `config`        |   `Object`    | `{}`    | [Player configuration](#configuration) (optional) |
+
+Initialize the library and call the `init` method **after** user consent acceptance.
+
+```js
 const prismaPlayer = new PrismaPlayer(document.getElementById('playerWrapper-1'));
 prismaPlayer.init();
 ```
 
-## Evénements
+## Configuration
 
-Le package expose les événements natifs ci-dessous sur l'élément `[data-ads-core]`. L'événement peut exposer des données additionnelles dans l'objet `e.detail`.
+The second arguments of the contructor is an optional object with the following parameters:
 
-| Type de l'événement | Description                                                                                            |
-| ------------------- | ------------------------------------------------------------------------------------------------------ |
-| `prismaPlayerReady` | Déclenché lorsque le player Dailymotion est prêt. L'instance du player est transmise dans l'événement. |
+| Arguments      |   Type   | Default | Description                                                                                                                                  |
+| -------------- | :------: | :-----: | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `playerParams` | `Object` |  `{}`   | [Player parameters](https://developers.dailymotion.com/player/#player-runtime-parameters) for Dailymotion video player for all video players |
+| `leaderVolume` | `number` | `0.01`  | Volume of the _leader_ player (between `0` and `1`)                                                                                          |
 
-Exemple d'un écouteur quand le player est prêt.
+```javascript
+const prismaPlayer = new PrismaPlayer(document.getElementById('playerWrapper-1'), {
+  playerParams: {
+    mute: true
+  }
+});
+prismaPlayer.init();
+```
+
+## Events
+
+The package exposes the following native events on the `[data-ads-core]` element. The event can expose additional data in the `e.detail` object.
+
+| Event type          | Description                                                                                 |
+| ------------------- | ------------------------------------------------------------------------------------------- |
+| `prismaPlayerReady` | Triggered when the Dailymotion player is ready. The player instance is passed in the event. |
+
+Example of a listener when the player is ready.
 
 ```js
 document.querySelector('#playerWrapper-1').addEventListener('prismaPlayerReady', (e) => {
-  // L'instance du player est accessible dans l'objet `e.detail.instance`
+  // The player instance is accessible in the `e.detail.instance` object
 });
 ```
 
-## Exemples
+## Examples
 
-### Player `Leader`
+### `Leader` Player
 
-Initialisation d'un player de type `Leader`
+Initializing a `Leader` type player
 
 ```html
 <div
@@ -148,9 +170,9 @@ const prismaPlayer = new PrismaPlayer(document.getElementById('playerWrapper-1')
 prismaPlayer.init();
 ```
 
-### Player `Widget`
+### `Widget` Player
 
-Initialisation d'un player de type `Widget`
+Initializing a `Widget` type player
 
 ```html
 <div
@@ -170,9 +192,9 @@ const player = new PrismaPlayer(document.getElementById('playerWrapper-1'));
 player.init();
 ```
 
-### Plusieurs player (`Leader` + `Widget`)
+### Multiple players (`Leader` + `Widget`)
 
-Initialisation de deux players sur la page, un `Leader` et un `Widget`
+Initializing two players on the page, one `Leader` and one `Widget`
 
 ```html
 <div
