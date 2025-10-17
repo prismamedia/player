@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  pack:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     env:
@@ -37,4 +37,4 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
             name: prisma-player-pack
-            path: $PACKAGES_DIR
+            path: ${{ env.PACKAGES_DIR }}
