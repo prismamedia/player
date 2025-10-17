@@ -2,13 +2,22 @@ import type {
 	AdPosition,
 	DailymotionPlayerInstance,
 	DailymotionPlayerInstanceState,
+	DailymotionPlayerOptionParams,
 	Player
 } from './types'
 
 export default class DailymotionPlayer {
 	player: Player
+	playerParams: DailymotionPlayerOptionParams
+	leaderVolume: number
 
-	constructor(element: HTMLElement) {
+	constructor(
+		element: HTMLElement,
+		{
+			playerParams = {},
+			leaderVolume = 0.01
+		}: { playerParams?: DailymotionPlayerOptionParams; leaderVolume?: number } = {}
+	) {
 		this.player = {
 			element,
 			adsCore: JSON.parse(element.getAttribute('data-ads-core') ?? ''),
@@ -17,6 +26,8 @@ export default class DailymotionPlayer {
 			adCallCounter: 0,
 			prerollPosition: 1 // Start at 1 for CoreAds
 		}
+		this.playerParams = playerParams
+		this.leaderVolume = leaderVolume
 	}
 
 	async init() {
@@ -73,11 +84,11 @@ export default class DailymotionPlayer {
 				video: this.player.adsCore.playerVideoId,
 				player: this.player.adsCore.playerId,
 				referrerPolicy: 'no-referrer-when-downgrade',
-				params: {
-					mute: true
-				}
+				params: this.playerParams
 			}
 		)
+		this.player.adsCore.playerPosition === 'Leader' &&
+			this.player.instance.setVolume(this.leaderVolume)
 		this.addEvents()
 	}
 

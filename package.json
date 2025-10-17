@@ -1,6 +1,6 @@
 {
 	"name": "@prismamedia/player",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"description": "Prisma Media player with Dailymotion and CoreAds",
 	"bugs": "https://github.com/prismamedia/player/issues",
 	"repository": {
