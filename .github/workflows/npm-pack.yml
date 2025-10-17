@@ -37,4 +37,4 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
             name: prisma-player-pack
-            path: ${{ env.PACKAGES_DIR }}
+            path: ${{ env.PACKAGES_DIR }}/
