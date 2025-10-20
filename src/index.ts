@@ -20,7 +20,7 @@ export default class DailymotionPlayer {
 	) {
 		this.player = {
 			element,
-			adsCore: JSON.parse(element.getAttribute('data-ads-core') ?? ''),
+			adsCore: JSON.parse(element.getAttribute('data-ads-core') ?? 'null'),
 			instance: null,
 			reboundCount: 0,
 			adCallCounter: 0,
@@ -28,6 +28,10 @@ export default class DailymotionPlayer {
 		}
 		this.playerParams = playerParams
 		this.leaderVolume = leaderVolume
+
+		this.onAdReadyToFetch = this.onAdReadyToFetch.bind(this)
+		this.onVideoStart = this.onVideoStart.bind(this)
+		this.onPlayerVideoChange = this.onPlayerVideoChange.bind(this)
 	}
 
 	async init() {
@@ -52,6 +56,9 @@ export default class DailymotionPlayer {
 				})
 			)
 		})
+
+		// Useful to terminate the function process and for unit test
+		await Promise.resolve()
 	}
 
 	/**
@@ -98,38 +105,52 @@ export default class DailymotionPlayer {
 	addEvents() {
 		const playerInstance = this.player.instance as DailymotionPlayerInstance
 
-		playerInstance.on(
-			window.dailymotion.events.AD_READYTOFETCH,
-			async ({ adPosition, adBreakId }: DailymotionPlayerInstanceState) => {
-				if (
-					adPosition === 'preroll' &&
-					(this.player.adCallCounter !== 0 || adBreakId === 'preroll2')
-				) {
-					const adParams = await this.getAdParams({
-						adPosition
-					})
-					playerInstance.setCustomConfig({
-						adurl: adParams
-					})
-				}
-			}
-		)
+		playerInstance.on(window.dailymotion.events.AD_READYTOFETCH, this.onAdReadyToFetch)
 
 		// Video rebound count is incremented when the video start
-		playerInstance.on(window.dailymotion.events.VIDEO_START, () => {
-			this.player.reboundCount++
-		})
+		playerInstance.on(window.dailymotion.events.VIDEO_START, this.onVideoStart)
 
 		// Preroll position is reset to its default value on video change
-		playerInstance.on(window.dailymotion.events.PLAYER_VIDEOCHANGE, () => {
-			this.player.prerollPosition = 1
-		})
+		playerInstance.on(window.dailymotion.events.PLAYER_VIDEOCHANGE, this.onPlayerVideoChange)
+	}
+
+	/**
+	 * On ad ready to fetch event
+	 * @param param Params from Dailymotion events
+	 * @param param.adPosition Ad position
+	 * @param param.adBreakId Ad break id
+	 */
+	async onAdReadyToFetch({ adPosition, adBreakId }: DailymotionPlayerInstanceState) {
+		const playerInstance = this.player.instance as DailymotionPlayerInstance
+
+		if (adPosition === 'preroll' && (this.player.adCallCounter !== 0 || adBreakId === 'preroll2')) {
+			const adParams = await this.getAdParams({
+				adPosition
+			})
+			playerInstance.setCustomConfig({
+				adurl: adParams
+			})
+		}
+	}
+
+	/**
+	 * On video start event
+	 */
+	onVideoStart() {
+		this.player.reboundCount++
+	}
+
+	/**
+	 * On player video change event
+	 */
+	onPlayerVideoChange() {
+		this.player.prerollPosition = 1
 	}
 
 	/**
 	 * Get ad params from CoreAds
-	 * @param {object} params
-	 * @param {'Leader'|'Widget'|'Autres'} params.adPosition Ad position
+	 * @param params
+	 * @param params.adPosition Ad position
 	 * @returns Ad url
 	 */
 	async getAdParams({ adPosition }: { adPosition: AdPosition }): Promise<string> {
