@@ -100,14 +100,33 @@ import PrismaPlayer from '@prismamedia/player';
 
 The constructor accepts the following parameters:
 
-| Arguments       |     Type      | Default |  Required  | Description                      |
-| --------------- | :-----------: | ------- | :--------: | :------------------------------- |
-| `playerElement` | `HTMLElement` | `null`  | `Required` | HTMLElement to target the player |
+| Arguments       |     Type      | Default |  Required  | Description                            |
+| --------------- | :-----------: | ------- | :--------: | :------------------------------------- |
+| `playerElement` | `HTMLElement` | `null`  | `Required` | HTMLElement to target the player       |
+| `config`        |   `Object`    | `{}`    | `Optional` | [Player configuration](#configuration) |
 
 Initialize the library and call the `init` method **after** user consent acceptance.
 
 ```js
 const prismaPlayer = new PrismaPlayer(document.getElementById('playerWrapper-1'));
+prismaPlayer.init();
+```
+
+## Configuration
+
+The second arguments of the contructor is an optional object with the following parameters:
+
+| Arguments      |   Type   | Default | Description                                                                                                                                  |
+| -------------- | :------: | :-----: | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `playerParams` | `Object` |  `{}`   | [Player parameters](https://developers.dailymotion.com/player/#player-runtime-parameters) for Dailymotion video player for all video players |
+| `leaderVolume` | `number` | `0.01`  | Volume of the _leader_ player (between `0` and `1`)                                                                                          |
+
+```javascript
+const prismaPlayer = new PrismaPlayer(document.getElementById('playerWrapper-1'), {
+  playerParams: {
+    mute: true
+  }
+});
 prismaPlayer.init();
 ```
 

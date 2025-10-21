@@ -11,7 +11,7 @@ const resolveApp = (relativePath) => path.resolve(appDirectory, relativePath)
 
 const createConfig = ({ isProduction }) => {
 	const WEBPACK_PUBLIC_PATH = process.env.WEBPACK_PUBLIC_PATH || '/'
-	const demos = ['home', 'basic']
+	const demos = ['home', 'leader', 'embed']
 
 	const config = {
 		entry: {
