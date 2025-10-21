@@ -70,7 +70,7 @@ The video player requires an HTML `<div>` element with the following HTML attrib
 
 ```html
 <div
-  id="<unique_id>"
+  id="<unique_id_1>"
   data-ads-core='{
     "playerId": "<player_id>",
     "playerPosition":  "<player_position>",
@@ -78,7 +78,7 @@ The video player requires an HTML `<div>` element with the following HTML attrib
     "playerVertical": "false"
   }'
 >
-  <div id="<unique_id>"></div>
+  <div id="<unique_id_2>"></div>
 </div>
 ```
 
@@ -105,7 +105,7 @@ The constructor accepts the following parameters:
 | `playerElement` | `HTMLElement` | `null`  | `Required` | HTMLElement to target the player       |
 | `config`        |   `Object`    | `{}`    | `Optional` | [Player configuration](#configuration) |
 
-Initialize the library with the HTML element `[data-ads-core]`. Next, call the `init` method **after** user consent acceptance.
+Initialize the library with the HTML element with the `<unique_id_1>` and the `[data-ads-core]`. Next, call the `init` method **after** user consent acceptance.
 
 ```js
 const prismaPlayer = new PrismaPlayer(document.getElementById('playerWrapper-1'));
