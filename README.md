@@ -135,15 +135,17 @@ prismaPlayer.init();
 
 The package exposes the following native events on the `[data-ads-core]` element. The event can expose additional data in the `e.detail` object.
 
-| Event type          | Description                                                                                 |
-| ------------------- | ------------------------------------------------------------------------------------------- |
-| `prismaPlayerReady` | Triggered when the Dailymotion player is ready. The player instance is passed in the event. |
+| Event type          | Description                                                                                                                                       |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `prismaPlayerReady` | Triggered when the Dailymotion player is ready. The [player instance](https://developers.dailymotion.com/player/#methods) is passed in the event. |
 
 Example of a listener when the player is ready.
 
 ```js
 document.querySelector('#playerWrapper-1').addEventListener('prismaPlayerReady', (e) => {
   // The player instance is accessible in the `e.detail.instance` object
+  // Example to set the volume to 1
+  // e.detail.instance.setVolume(1);
 });
 ```
 
